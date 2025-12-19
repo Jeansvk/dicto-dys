@@ -1,4 +1,5 @@
 node_modules/
+venv/
 
 # Gros fichiers JSON générés (régénérables avec les scripts)
 data/Lexique383.json

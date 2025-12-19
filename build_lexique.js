@@ -19,48 +19,32 @@ const correspondance = {
     "CON": "CON"
 };
 
-// TABLE DE CONVERSION : LEXIQUE3 -> FRANÇAIS INTUITIF
-const mapPhonFr = {
-    // Voyelles
-    'a': 'a',
-    'i': 'i',
-    'e': 'é',  // blé
-    'E': 'è',  // mer
-    'o': 'o',  // mot
-    'O': 'o',  // botte
-    'u': 'ou', // genou
-    'y': 'u',  // tu
-    '°': 'e',  // le (schwa)
-    '2': 'eu', // peu
-    '9': 'eu', // peur
-
-    // Nasales
-    '@': 'an', // an
-    '1': 'in', // un/in
-    '§': 'on', // on
-    '5': 'un', // un (brun)
-
-    // Consonnes spéciales
-    'S': 'ch', // chat
-    'Z': 'j',  // je
-    'R': 'r',
-    'N': 'gn', // agneau
-    'G': 'ng', // parking
-    
-    // Semi-voyelles
-    'j': 'y',  // yeux
-    '8': 'u',  // huit
-    'w': 'ou', // oui
-
-    // Consonnes standards
-    'b':'b', 'd':'d', 'f':'f', 'g':'g', 'k':'k', 'l':'l', 
-    'm':'m', 'n':'n', 'p':'p', 's':'s', 't':'t', 'v':'v', 'z':'z'
+// TABLE DE CONVERSION : LEXIQUE383 -> CODE SIMPLIFIÉ (phonetic_dys.csv)
+const mapPhonSimple = {
+    'a': 'a', 'i': 'i', 'e': 'e', 'E': 'e', 'o': 'o', 'O': 'o',
+    'u': 'u', 'y': 'y', '°': 'e', '2': 'e', '9': 'e',
+    '@': '@', '1': '1', '§': '§', '5': '1',
+    'S': 'ch', 'Z': 'j', 'R': 'r', 'N': 'ni', 'G': 'ng',
+    'j': 'i', '8': 'yi', 'w': 'w',
+    'b': 'b', 'd': 'd', 'f': 'f', 'g': 'g', 'k': 'k', 'l': 'l',
+    'm': 'm', 'n': 'n', 'p': 'p', 's': 's', 't': 't', 'v': 'v', 'z': 'z'
 };
 
-// Fonction de conversion SAMPA -> Français intuitif
-function convertPhon(sampa) {
+// TABLE DE CONVERSION : LEXIQUE383 -> CODE AUDITIF (phonetic_dys.csv)
+const mapPhonAuditif = {
+    'a': 'a', 'i': 'i', 'e': 'e', 'E': 'e', 'o': 'o', 'O': 'o',
+    'u': 'u', 'y': 'y', '°': 'e', '2': 'e', '9': 'e',
+    '@': '$', '1': '$', '§': '$', '5': '$',
+    'S': '£', 'Z': '£', 'R': 'r', 'N': 'ni', 'G': 'ng',
+    'j': 'i', '8': 'yi', 'w': 'w',
+    'b': '%', 'd': '#', 'f': '?', 'g': '&', 'k': '&', 'l': 'l',
+    'm': '€', 'n': '€', 'p': '%', 's': '!', 't': '#', 'v': '?', 'z': '!'
+};
+
+// Fonction de conversion phonétique
+function convertPhon(sampa, map) {
     if (!sampa) return '';
-    return [...sampa].map(c => mapPhonFr[c] || c).join('');
+    return [...sampa].map(c => map[c] || c).join('');
 }
 
 async function processLexique() {
@@ -131,7 +115,8 @@ async function processLexique() {
                 // Si on trouve le couple (Orthographe + Catégorie), on garde l'entrée
                 results.push({
                     ortho: row['ortho'],
-                    phon: convertPhon(row['phon']),
+                    phon: convertPhon(row['phon'], mapPhonSimple),
+                    phon_dys: convertPhon(row['phon'], mapPhonAuditif),
                     lemme: row['lemme'],
                     cgram: row['cgram'], // On garde la nomenclature Lexique
                     genre: row['genre'],
