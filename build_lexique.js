@@ -125,6 +125,9 @@ async function processLexique() {
             const match = candidatsManulex.find(cand => cand.synt === catCible);
 
             if (match) {
+                // Filtre : Exclure les mots avec trait d'union ET fréquence CP-CM2 < 1
+                if (row['ortho'].includes('-') && match.freq_u.cp_cm2 < 1) continue;
+
                 // Si on trouve le couple (Orthographe + Catégorie), on garde l'entrée
                 results.push({
                     ortho: row['ortho'],

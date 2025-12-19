@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "name": "alphabet_phonetique_lexique383",
+    "version": "1.0",
+    "description": "Correspondances symbole -> graphie phonétique (FR) avec exemples et IPA.",
+    "notes": [
+      "Symboles conçus pour être atomiques (1 symbole = 1 son).",
+      "Les champs 'grapheme' sont des équivalents usuels en français (pas une orthographe unique)."
+    ]
+  },
+  "mappings": {
+    "vowels": {
+      "a": { "grapheme": "a", "example": "papa", "ipa": "a" },
+      "i": { "grapheme": "i", "example": "lit", "ipa": "i" },
+      "e": { "grapheme": "é", "example": "blé", "ipa": "e" },
+      "E": { "grapheme": "è", "example": "mer", "ipa": "ɛ" },
+      "o": { "grapheme": "o", "example": "mot", "ipa": "o" },
+      "O": { "grapheme": "o", "example": "botte", "ipa": "ɔ" },
+      "u": { "grapheme": "ou", "example": "genou", "ipa": "u" },
+      "y": { "grapheme": "u", "example": "tu", "ipa": "y" },
+      "°": { "grapheme": "e", "example": "le", "ipa": "ə" },
+      "2": { "grapheme": "eu", "example": "peu", "ipa": "ø" },
+      "9": { "grapheme": "eu", "example": "peur", "ipa": "œ" }
+    },
+    "nasals": {
+      "@": { "grapheme": "an", "example": "an", "ipa": "ɑ̃" },
+      "1": { "grapheme": "in", "example": "un / in", "ipa": "ɛ̃" },
+      "§": { "grapheme": "on", "example": "on", "ipa": "ɔ̃" },
+      "5": { "grapheme": "un", "example": "brun", "ipa": "œ̃" }
+    },
+    "special_consonants": {
+      "S": { "grapheme": "ch", "example": "chat", "ipa": "ʃ" },
+      "Z": { "grapheme": "j", "example": "je", "ipa": "ʒ" },
+      "R": { "grapheme": "r", "example": "rue", "ipa": "ʁ" },
+      "N": { "grapheme": "gn", "example": "agneau", "ipa": "ɲ" },
+      "G": { "grapheme": "ng", "example": "parking", "ipa": "ŋ" }
+    },
+    "semi_vowels": {
+      "j": { "grapheme": "y", "example": "yeux", "ipa": "j" },
+      "8": { "grapheme": "u", "example": "huit", "ipa": "ɥ" },
+      "w": { "grapheme": "ou", "example": "oui", "ipa": "w" }
+    },
+    "consonants": {
+      "b": { "grapheme": "b", "example": "bal", "ipa": "b" },
+      "d": { "grapheme": "d", "example": "dos", "ipa": "d" },
+      "f": { "grapheme": "f", "example": "fou", "ipa": "f" },
+      "g": { "grapheme": "g", "example": "gare", "ipa": "g" },
+      "k": { "grapheme": "k", "example": "kiwi", "ipa": "k" },
+      "l": { "grapheme": "l", "example": "lit", "ipa": "l" },
+      "m": { "grapheme": "m", "example": "mot", "ipa": "m" },
+      "n": { "grapheme": "n", "example": "nez", "ipa": "n" },
+      "p": { "grapheme": "p", "example": "pied", "ipa": "p" },
+      "s": { "grapheme": "s", "example": "sel", "ipa": "s" },
+      "t": { "grapheme": "t", "example": "tout", "ipa": "t" },
+      "v": { "grapheme": "v", "example": "vin", "ipa": "v" },
+      "z": { "grapheme": "z", "example": "zéro", "ipa": "z" }
+    }
+  },
+  "flat_map_symbol_to_grapheme": {
+    "a": "a",
+    "i": "i",
+    "e": "é",
+    "E": "è",
+    "o": "o",
+    "O": "o",
+    "u": "ou",
+    "y": "u",
+    "°": "e",
+    "2": "eu",
+    "9": "eu",
+    "@": "an",
+    "1": "in",
+    "§": "on",
+    "5": "un",
+    "S": "ch",
+    "Z": "j",
+    "R": "r",
+    "N": "gn",
+    "G": "ng",
+    "j": "y",
+    "8": "u",
+    "w": "ou",
+    "b": "b",
+    "d": "d",
+    "f": "f",
+    "g": "g",
+    "k": "k",
+    "l": "l",
+    "m": "m",
+    "n": "n",
+    "p": "p",
+    "s": "s",
+    "t": "t",
+    "v": "v",
+    "z": "z"
+  }
+}
+
