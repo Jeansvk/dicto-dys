@@ -1,0 +1,15 @@
+{
+  "name": "dicto_build",
+  "version": "1.0.0",
+  "main": "ingest_manulex.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}
