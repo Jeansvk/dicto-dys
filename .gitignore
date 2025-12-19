@@ -1,2 +1,7 @@
 node_modules/
 
+# Gros fichiers JSON générés (régénérables avec les scripts)
+data/Lexique383.json
+data/lexique_filtre.json
+data/manulex_full.json
+
