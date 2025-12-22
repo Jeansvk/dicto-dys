@@ -18,3 +18,4 @@ for (let i = 1; i < lines.length; i++) {
 fs.writeFileSync(OUTPUT, JSON.stringify(data, null, 2));
 console.log(`✅ ${data.length} entrées converties → ${OUTPUT}`);
 
+

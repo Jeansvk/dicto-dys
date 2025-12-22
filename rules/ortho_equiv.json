@@ -1,0 +1,46 @@
+{
+  "_comment": "Équivalences orthographiques - Même son, graphies différentes",
+  
+  "son_o": {
+    "o": ["o", "au", "eau", "ô"],
+    "au": ["au", "o", "eau"],
+    "eau": ["eau", "o", "au"]
+  },
+  
+  "son_e": {
+    "e": ["e", "ai", "ei", "é", "è", "ê"],
+    "é": ["é", "e", "ai", "ei", "er", "ez"],
+    "è": ["è", "e", "ai", "ei", "ê"],
+    "ai": ["ai", "e", "ei", "é", "è"],
+    "ei": ["ei", "e", "ai"]
+  },
+  
+  "son_ou": {
+    "ou": ["ou", "oû", "oo"]
+  },
+  
+  "nasales_an": {
+    "an": ["an", "en", "am", "em"],
+    "en": ["en", "an", "am", "em"],
+    "am": ["am", "an", "en", "em"],
+    "em": ["em", "en", "an", "am"]
+  },
+  
+  "nasales_in": {
+    "in": ["in", "ain", "ein", "im", "yn", "ym"],
+    "ain": ["ain", "in", "ein"],
+    "ein": ["ein", "in", "ain"]
+  },
+  
+  "nasales_on": {
+    "on": ["on", "om"],
+    "om": ["om", "on"]
+  },
+  
+  "son_oi": {
+    "oi": ["oi", "oie", "oy"],
+    "wa": ["oi", "oie"]
+  }
+}
+
+

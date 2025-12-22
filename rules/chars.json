@@ -1,0 +1,60 @@
+{
+  "_comment": "Lettres simples → Code auditif DYS",
+  
+  "voyelles": {
+    "_comment": "u → y car le son 'u' français est /y/ en SAMPA. Le son 'ou' est géré par pattern.",
+    "a": "a",
+    "e": "e",
+    "i": "i",
+    "o": "o",
+    "u": "y",
+    "y": "i"
+  },
+  
+  "voyelles_accentuees": {
+    "é": "e",
+    "è": "e",
+    "ê": "e",
+    "ë": "e",
+    "à": "a",
+    "â": "a",
+    "î": "i",
+    "ï": "i",
+    "ô": "o",
+    "ù": "y",
+    "û": "y",
+    "ü": "y",
+    "ÿ": "y"
+  },
+  
+  "confusions_consonnes": {
+    "_comment": "Consonnes confondues par les DYS - même code auditif",
+    "b": "%",
+    "p": "%",
+    "d": "#",
+    "t": "#",
+    "f": "?",
+    "v": "?",
+    "g": "&",
+    "k": "&",
+    "c": "&",
+    "q": "&",
+    "s": "!",
+    "z": "!",
+    "ç": "!",
+    "x": "!",
+    "j": "£",
+    "m": "€",
+    "n": "€"
+  },
+  
+  "consonnes_distinctes": {
+    "_comment": "Consonnes qui ne sont pas confondues",
+    "l": "l",
+    "r": "r",
+    "w": "w",
+    "h": ""
+  }
+}
+
+

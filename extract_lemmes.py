@@ -78,3 +78,4 @@ def extraire_lemmes_utiles():
 if __name__ == "__main__":
     extraire_lemmes_utiles()
 
+

@@ -1,0 +1,48 @@
+{
+  "_comment": "Patterns complexes (digrammes/trigrammes) - Traités en priorité par ordre de longueur décroissante",
+  
+  "nasales_complexes": [
+    { "src": "ain", "code": "$", "exemple": "pain" },
+    { "src": "aim", "code": "$", "exemple": "faim" },
+    { "src": "ein", "code": "$", "exemple": "plein" },
+    { "src": "eim", "code": "$", "exemple": "Reims" },
+    { "src": "oin", "code": "w$", "exemple": "loin" },
+    { "src": "ien", "code": "i$", "exemple": "bien" }
+  ],
+  
+  "nasales_simples": [
+    { "src": "an", "code": "$", "exemple": "blanc" },
+    { "src": "am", "code": "$", "exemple": "lampe" },
+    { "src": "en", "code": "$", "exemple": "vent" },
+    { "src": "em", "code": "$", "exemple": "temps" },
+    { "src": "on", "code": "$", "exemple": "bon" },
+    { "src": "om", "code": "$", "exemple": "nom" },
+    { "src": "un", "code": "$", "exemple": "brun" },
+    { "src": "um", "code": "$", "exemple": "parfum" },
+    { "src": "in", "code": "$", "exemple": "lapin" },
+    { "src": "im", "code": "$", "exemple": "simple" },
+    { "src": "yn", "code": "$", "exemple": "syndicat" },
+    { "src": "ym", "code": "$", "exemple": "symbole" }
+  ],
+  
+  "digrammes_consonnes": [
+    { "src": "ch", "code": "£", "exemple": "chat" },
+    { "src": "ph", "code": "?", "exemple": "photo" },
+    { "src": "qu", "code": "&", "exemple": "qui" },
+    { "src": "gu", "code": "&", "exemple": "guitare" },
+    { "src": "gn", "code": "ni", "exemple": "montagne" }
+  ],
+  
+  "digrammes_voyelles": [
+    { "src": "eau", "code": "o", "exemple": "eau" },
+    { "src": "ou", "code": "u", "exemple": "nous" },
+    { "src": "au", "code": "o", "exemple": "auto" },
+    { "src": "ai", "code": "e", "exemple": "mais" },
+    { "src": "ei", "code": "e", "exemple": "neige" },
+    { "src": "eu", "code": "e", "exemple": "peu" },
+    { "src": "oe", "code": "e", "exemple": "œuf" },
+    { "src": "oi", "code": "wa", "exemple": "roi" }
+  ]
+}
+
+

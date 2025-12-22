@@ -1,0 +1,123 @@
+{
+  "_comment": "Règles de filtrage contextuel grammatical",
+  
+  "determinants_masc_sing": {
+    "_comment": "Après ces mots, on attend un NOM masculin singulier",
+    "triggers": ["un", "le", "mon", "ton", "son", "ce", "du", "au"],
+    "filter": {
+      "cgram": ["NOM", "ADJ"],
+      "genre": "m",
+      "nombre": "s"
+    },
+    "boost": 25
+  },
+  
+  "determinants_fem_sing": {
+    "_comment": "Après ces mots, on attend un NOM féminin singulier",
+    "triggers": ["une", "la", "ma", "ta", "sa", "cette"],
+    "filter": {
+      "cgram": ["NOM", "ADJ"],
+      "genre": "f",
+      "nombre": "s"
+    },
+    "boost": 25
+  },
+  
+  "determinants_pluriel": {
+    "_comment": "Après ces mots, on attend un pluriel",
+    "triggers": ["les", "des", "mes", "tes", "ses", "ces", "aux", "nos", "vos", "leurs"],
+    "filter": {
+      "cgram": ["NOM", "ADJ"],
+      "nombre": "p"
+    },
+    "boost": 25
+  },
+  
+  "pronom_je": {
+    "_comment": "Après 'je', léger boost pour verbe 1ère personne singulier",
+    "triggers": ["je", "j'"],
+    "filter": {
+      "cgram": ["VER"],
+      "infover_match": ["1s", "1sg"]
+    },
+    "boost": 20
+  },
+  
+  "pronom_tu": {
+    "_comment": "Après 'tu', léger boost pour verbe 2ème personne singulier",
+    "triggers": ["tu"],
+    "filter": {
+      "cgram": ["VER"],
+      "infover_match": ["2s", "2sg"]
+    },
+    "boost": 20
+  },
+  
+  "pronom_il_elle": {
+    "_comment": "Après 'il/elle/on', léger boost pour verbe 3ème personne singulier",
+    "triggers": ["il", "elle", "on"],
+    "filter": {
+      "cgram": ["VER"],
+      "infover_match": ["3s", "3sg"]
+    },
+    "boost": 20
+  },
+  
+  "pronom_nous": {
+    "_comment": "Après 'nous', léger boost pour verbe 1ère personne pluriel",
+    "triggers": ["nous"],
+    "filter": {
+      "cgram": ["VER"],
+      "infover_match": ["1p", "1pl"]
+    },
+    "boost": 20
+  },
+  
+  "pronom_vous": {
+    "_comment": "Après 'vous', léger boost pour verbe 2ème personne pluriel",
+    "triggers": ["vous"],
+    "filter": {
+      "cgram": ["VER"],
+      "infover_match": ["2p", "2pl"]
+    },
+    "boost": 20
+  },
+  
+  "pronom_ils_elles": {
+    "_comment": "Après 'ils/elles', léger boost pour verbe 3ème personne pluriel",
+    "triggers": ["ils", "elles"],
+    "filter": {
+      "cgram": ["VER"],
+      "infover_match": ["3p", "3pl"]
+    },
+    "boost": 20
+  },
+  
+  "adverbes_intensite": {
+    "_comment": "Après très/plus/moins/trop, on attend un adjectif ou adverbe",
+    "triggers": ["très", "tres", "plus", "moins", "trop", "assez", "si"],
+    "filter": {
+      "cgram": ["ADJ", "ADV"]
+    },
+    "boost": 20
+  },
+  
+  "preposition_de": {
+    "_comment": "Après 'de', on attend un nom ou infinitif",
+    "triggers": ["de", "d'"],
+    "filter": {
+      "cgram": ["NOM", "VER"]
+    },
+    "boost": 15
+  },
+  
+  "preposition_a": {
+    "_comment": "Après 'à', on attend un nom ou infinitif",
+    "triggers": ["à", "a"],
+    "filter": {
+      "cgram": ["NOM", "VER"]
+    },
+    "boost": 15
+  }
+}
+

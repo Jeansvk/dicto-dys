@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔮 Prédicteur DYS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #1a1b26;
+            --bg-card: #24283b;
+            --accent: #7aa2f7;
+            --accent-hover: #89b4fa;
+            --text: #c0caf5;
+            --text-muted: #565f89;
+            --success: #9ece6a;
+            --warning: #e0af68;
+            --pink: #f7768e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        .search-box {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .input-wrapper {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            font-size: 1.5rem;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+            border: 2px solid var(--text-muted);
+            border-radius: 0.75rem;
+            background: var(--bg-dark);
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        input[type="text"]:focus {
+            border-color: var(--accent);
+        }
+        
+        input[type="text"]::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .code-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: var(--bg-dark);
+            border-radius: 0.5rem;
+            font-family: monospace;
+        }
+        
+        .code-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .code-value {
+            color: var(--warning);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .results {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .results-header {
+            padding: 1rem 1.5rem;
+            background: rgba(122, 162, 247, 0.1);
+            border-bottom: 1px solid var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .results-title {
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .results-count {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .result-list {
+            list-style: none;
+        }
+        
+        .result-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(86, 95, 137, 0.3);
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+        
+        .result-item:hover {
+            background: rgba(122, 162, 247, 0.1);
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-rank {
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-dark);
+            border-radius: 0.5rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-right: 1rem;
+        }
+        
+        .result-rank.top {
+            background: linear-gradient(135deg, var(--accent), var(--pink));
+            color: white;
+        }
+        
+        .result-content {
+            flex: 1;
+        }
+        
+        .result-word {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        
+        .result-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.25rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .result-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-ortho {
+            background: rgba(158, 206, 106, 0.2);
+            color: var(--success);
+        }
+        
+        .badge-phon {
+            background: rgba(247, 118, 142, 0.2);
+            color: var(--pink);
+        }
+        
+        .badge-seg {
+            background: rgba(224, 175, 104, 0.2);
+            color: var(--warning);
+        }
+        
+        .badge-context {
+            background: rgba(122, 162, 247, 0.2);
+            color: var(--accent);
+        }
+        
+        .context-separator {
+            margin: 0 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        .context-value {
+            color: var(--accent);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .context-match {
+            border-left: 3px solid var(--accent);
+        }
+        
+        .result-freq {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .freq-bar {
+            width: 60px;
+            height: 6px;
+            background: var(--bg-dark);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .freq-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--accent));
+            border-radius: 3px;
+        }
+        
+        .freq-value {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            min-width: 50px;
+            text-align: right;
+        }
+        
+        .empty-state {
+            padding: 3rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+        
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .legend {
+            margin-top: 2rem;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            border-radius: 1rem;
+        }
+        
+        .legend-title {
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .legend-symbol {
+            font-family: monospace;
+            font-weight: bold;
+            color: var(--warning);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔮 Prédicteur DYS</h1>
+            <p class="subtitle">Tape un mot et découvre les suggestions adaptées</p>
+        </header>
+        
+        <div class="search-box">
+            <div class="input-wrapper">
+                <input type="text" id="searchInput" placeholder="Tape un mot..." autofocus>
+            </div>
+            <div class="code-display">
+                <span class="code-label">Code DYS :</span>
+                <span class="code-value" id="codeDisplay">—</span>
+                <span class="context-separator">|</span>
+                <span class="code-label">Contexte :</span>
+                <span class="context-value" id="contextDisplay">—</span>
+            </div>
+        </div>
+        
+        <div class="results">
+            <div class="results-header">
+                <span class="results-title">📋 Suggestions</span>
+                <span class="results-count" id="resultsCount">0 résultats</span>
+            </div>
+            <ul class="result-list" id="resultList">
+                <li class="empty-state">
+                    <div class="icon">✨</div>
+                    <div>Commence à taper pour voir les suggestions</div>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-title">🔤 Codes DYS (confusions)</div>
+            <div class="legend-items">
+                <div class="legend-item"><span class="legend-symbol">%</span> b/p</div>
+                <div class="legend-item"><span class="legend-symbol">#</span> d/t</div>
+                <div class="legend-item"><span class="legend-symbol">?</span> f/v</div>
+                <div class="legend-item"><span class="legend-symbol">&</span> g/k/c</div>
+                <div class="legend-item"><span class="legend-symbol">!</span> s/z</div>
+                <div class="legend-item"><span class="legend-symbol">£</span> ch/j</div>
+                <div class="legend-item"><span class="legend-symbol">€</span> m/n</div>
+                <div class="legend-item"><span class="legend-symbol">$</span> nasales</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const codeDisplay = document.getElementById('codeDisplay');
+        const contextDisplay = document.getElementById('contextDisplay');
+        const resultList = document.getElementById('resultList');
+        const resultsCount = document.getElementById('resultsCount');
+        
+        // Labels lisibles pour les contextes
+        const contextLabels = {
+            'determinants_masc_sing': '📘 NOM masc.',
+            'determinants_fem_sing': '📙 NOM fém.',
+            'determinants_pluriel': '📗 Pluriel',
+            'pronom_je': '🔵 VER 1s',
+            'pronom_tu': '🔵 VER 2s',
+            'pronom_il_elle': '🔵 VER 3s',
+            'pronom_nous': '🔵 VER 1p',
+            'pronom_vous': '🔵 VER 2p',
+            'pronom_ils_elles': '🔵 VER 3p',
+            'adverbes_intensite': '🟣 ADJ/ADV',
+            'preposition_de': '⚪ NOM/VER',
+            'preposition_a': '⚪ NOM/VER'
+        };
+        
+        let debounceTimer;
+        
+        // Extrait le dernier mot en cours de frappe
+        function getLastWord(text) {
+            const words = text.split(' ').filter(w => w.length > 0);
+            return words.length > 0 ? words[words.length - 1] : '';
+        }
+        
+        // Extrait le mot précédent (pour les liaisons)
+        function getPrevWord(text) {
+            const words = text.split(' ').filter(w => w.length > 0);
+            return words.length > 1 ? words[words.length - 2] : '';
+        }
+        
+        // Remplace le dernier mot par le mot sélectionné
+        function replaceLastWord(text, newWord) {
+            const words = text.split(' ');
+            words[words.length - 1] = newWord;
+            return words.join(' ') + ' ';  // Ajoute un espace pour le prochain mot
+        }
+        
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const fullText = e.target.value;
+                const lastWord = getLastWord(fullText);
+                const prevWord = getPrevWord(fullText);
+                fetchPredictions(lastWord, prevWord);
+            }, 150);
+        });
+        
+        async function fetchPredictions(query, prevWord = '') {
+            if (!query.trim()) {
+                codeDisplay.textContent = '—';
+                contextDisplay.textContent = '—';
+                resultsCount.textContent = '0 résultats';
+                resultList.innerHTML = `
+                    <li class="empty-state">
+                        <div class="icon">✨</div>
+                        <div>Commence à taper pour voir les suggestions</div>
+                    </li>
+                `;
+                return;
+            }
+            
+            try {
+                let url = `/api/predict?q=${encodeURIComponent(query)}&limit=15`;
+                if (prevWord) {
+                    url += `&prev=${encodeURIComponent(prevWord)}`;
+                }
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                codeDisplay.textContent = data.code_dys || '—';
+                
+                // Afficher le contexte détecté
+                if (data.context) {
+                    contextDisplay.textContent = contextLabels[data.context.name] || data.context.name;
+                } else {
+                    contextDisplay.textContent = '—';
+                }
+                
+                resultsCount.textContent = `${data.count} résultat${data.count > 1 ? 's' : ''}`;
+                
+                if (data.results.length === 0) {
+                    resultList.innerHTML = `
+                        <li class="empty-state">
+                            <div class="icon">🤷</div>
+                            <div>Aucun résultat pour "${query}"</div>
+                        </li>
+                    `;
+                    return;
+                }
+                
+                const maxFreq = Math.max(...data.results.map(r => parseFloat(r.freq) || 0));
+                
+                resultList.innerHTML = data.results.map((r, i) => {
+                    const freqPercent = maxFreq > 0 ? (parseFloat(r.freq) / maxFreq * 100) : 0;
+                    let matchBadge = r.match === 'ortho' 
+                        ? '<span class="result-badge badge-ortho">📖 ortho</span>'
+                        : '<span class="result-badge badge-phon">🔊 phon</span>';
+                    
+                    // Badge segmentation si liaison détectée
+                    if (r.segmentation) {
+                        matchBadge += '<span class="result-badge badge-seg">🔗 liaison</span>';
+                    }
+                    
+                    // Badge contexte grammatical si match
+                    if (r.contextMatch) {
+                        matchBadge += '<span class="result-badge badge-context">✓ contexte</span>';
+                    }
+                    
+                    // Classe spéciale pour les matchs de contexte
+                    const contextClass = r.contextMatch ? 'context-match' : '';
+                    
+                    return `
+                        <li class="result-item ${contextClass}" onclick="selectWord('${r.mot}')">
+                            <div class="result-rank ${i === 0 ? 'top' : ''}">${i + 1}</div>
+                            <div class="result-content">
+                                <div class="result-word">${r.mot}</div>
+                                <div class="result-meta">
+                                    <span>${r.lemme}</span>
+                                    <span>${r.cgram}</span>
+                                    ${matchBadge}
+                                </div>
+                            </div>
+                            <div class="result-freq">
+                                <div class="freq-bar">
+                                    <div class="freq-fill" style="width: ${freqPercent}%"></div>
+                                </div>
+                                <span class="freq-value">${r.freq}</span>
+                            </div>
+                        </li>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+            }
+        }
+        
+        function selectWord(word) {
+            const currentText = searchInput.value;
+            searchInput.value = replaceLastWord(currentText, word);
+            // Réinitialiser les suggestions pour le prochain mot
+            codeDisplay.textContent = '—';
+            contextDisplay.textContent = '—';
+            resultsCount.textContent = '0 résultats';
+            resultList.innerHTML = `
+                <li class="empty-state">
+                    <div class="icon">✨</div>
+                    <div>Continue à taper...</div>
+                </li>
+            `;
+            searchInput.focus();
+        }
+    </script>
+</body>
+</html>
+

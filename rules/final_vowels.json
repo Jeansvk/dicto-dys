@@ -1,0 +1,32 @@
+{
+  "_comment": "Expansions des voyelles finales - Quand l'enfant tape une voyelle finale, quels sons DYS peut-elle représenter ?",
+  
+  "expansions": {
+    "e": {
+      "codes": ["e", "o", "$"],
+      "comment": "e → e, eau(o), in/un($)"
+    },
+    "a": {
+      "codes": ["a", "$"],
+      "comment": "a → a, an($)"
+    },
+    "o": {
+      "codes": ["o", "u"],
+      "comment": "o → o, ou(u)"
+    },
+    "y": {
+      "codes": ["y"],
+      "comment": "u français → y seulement"
+    },
+    "i": {
+      "codes": ["i"],
+      "comment": "i → i seulement"
+    },
+    "u": {
+      "codes": ["u"],
+      "comment": "ou → u seulement (via pattern 'ou')"
+    }
+  }
+}
+
+

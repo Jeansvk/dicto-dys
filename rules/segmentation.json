@@ -1,0 +1,41 @@
+{
+  "_comment": "Règles de segmentation pour les liaisons françaises",
+  
+  "liaisons_n": {
+    "_comment": "Liaison en N - l'enfant entend 'navion' pour 'un avion'",
+    "triggers": ["un", "mon", "ton", "son", "aucun", "bien", "rien", "en"],
+    "prefix": "n",
+    "action": "remove_first"
+  },
+  
+  "liaisons_z": {
+    "_comment": "Liaison en Z - l'enfant entend 'zamis' pour 'les amis'",
+    "triggers": ["les", "des", "mes", "tes", "ses", "ces", "aux", "eux", "nous", "vous", "ils", "elles"],
+    "prefix": ["z", "s"],
+    "action": "remove_first"
+  },
+  
+  "liaisons_t": {
+    "_comment": "Liaison en T - l'enfant entend 'tamis' pour 'petit ami'",
+    "triggers": ["petit", "grand", "est", "ont", "sont", "fait", "tout", "quand", "comment"],
+    "prefix": "t",
+    "action": "remove_first"
+  },
+  
+  "elision_l": {
+    "_comment": "Élision L' - l'enfant écrit 'lavion' pour 'l'avion'",
+    "triggers": null,
+    "prefix": "l",
+    "min_rest_length": 2,
+    "action": "remove_first"
+  },
+  
+  "elision_d": {
+    "_comment": "Élision D' - l'enfant écrit 'daccord' pour 'd'accord'",
+    "triggers": null,
+    "prefix": "d",
+    "min_rest_length": 2,
+    "action": "remove_first"
+  }
+}
+
