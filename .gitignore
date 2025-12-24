@@ -1,6 +1,9 @@
 node_modules/
 venv/
 
+# Variables d'environnement (clés API)
+.env
+
 # Gros fichiers JSON générés (régénérables avec les scripts)
 data/Lexique383.json
 data/lexique_filtre.json

@@ -31,7 +31,36 @@ class PredicteurDys {
     // Référence aux règles compilées
     this.rules = ruleRepo.getMappings();
     
+    // Charger l'index emoji (fichier séparé)
+    this.indexEmojis = this.loadEmojis(jsonPath);
+    
     console.log(`✅ ${this.meta.total_entries} mots chargés`);
+    console.log(`🎨 ${Object.keys(this.indexEmojis).length} emojis chargés`);
+  }
+
+  /**
+   * Charge l'index des emojis depuis un fichier séparé
+   * @param {string} dictPath - Chemin du dictionnaire (pour trouver le dossier data)
+   * @returns {object} - Index lemme -> emoji
+   */
+  loadEmojis(dictPath) {
+    const emojiPath = path.join(path.dirname(dictPath), 'index_emojis.json');
+    if (fs.existsSync(emojiPath)) {
+      console.log("🎨 Chargement des emojis...");
+      return JSON.parse(fs.readFileSync(emojiPath, 'utf8'));
+    }
+    console.log("⚠️ Fichier index_emojis.json non trouvé");
+    return {};
+  }
+
+  /**
+   * Récupère l'emoji associé à un lemme
+   * @param {string} lemme - Le lemme à chercher
+   * @returns {string|null} - L'emoji ou null
+   */
+  getEmoji(lemme) {
+    if (!lemme) return null;
+    return this.indexEmojis[lemme.toLowerCase()] || null;
   }
 
   /**

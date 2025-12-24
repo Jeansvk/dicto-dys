@@ -34,6 +34,7 @@ app.get('/api/predict', (req, res) => {
     const formatted = results.map(r => ({
         mot: r.ortho,
         lemme: r.lemme,
+        emoji: predicteur.getEmoji(r.lemme),
         phon: r.phon,
         phon_dys: r.phon_dys,
         cgram: r.cgram,

@@ -70,7 +70,7 @@ class RuleRepository {
     const p = this.rules.patterns;
     
     // Collecter tous les patterns de toutes les catégories
-    const categories = ['nasales_complexes', 'nasales_simples', 'digrammes_consonnes', 'digrammes_voyelles'];
+    const categories = ['suffixes_tion', 'doubles_consonnes', 'nasales_complexes', 'nasales_simples', 'digrammes_consonnes', 'digrammes_voyelles'];
     for (const cat of categories) {
       if (p[cat]) {
         for (const rule of p[cat]) {

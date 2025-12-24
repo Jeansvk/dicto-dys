@@ -485,7 +485,7 @@
                         <li class="result-item ${contextClass}" onclick="selectWord('${r.mot}')">
                             <div class="result-rank ${i === 0 ? 'top' : ''}">${i + 1}</div>
                             <div class="result-content">
-                                <div class="result-word">${r.mot}</div>
+                                <div class="result-word">${r.emoji ? r.emoji + ' ' : ''}${r.mot}</div>
                                 <div class="result-meta">
                                     <span>${r.lemme}</span>
                                     <span>${r.cgram}</span>

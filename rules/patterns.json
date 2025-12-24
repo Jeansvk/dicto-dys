@@ -1,6 +1,32 @@
 {
   "_comment": "Patterns complexes (digrammes/trigrammes) - Traités en priorité par ordre de longueur décroissante",
   
+  "suffixes_tion": [
+    { "src": "stion", "code": "!#i$", "exemple": "question (s protège le t)" },
+    { "src": "xtion", "code": "&#i$", "exemple": "mixtion (x protège le t)" },
+    { "src": "tion", "code": "!i$", "exemple": "nation (ti → si)" },
+    { "src": "tiel", "code": "!iel", "exemple": "partiel (ti → si)" },
+    { "src": "tien", "code": "!i$", "exemple": "martien (ti → si)" },
+    { "src": "tieux", "code": "!ie", "exemple": "ambitieux (ti → si)" },
+    { "src": "tiaux", "code": "!io", "exemple": "partiaux (ti → si)" }
+  ],
+  
+  "doubles_consonnes": [
+    { "src": "ll", "code": "l", "exemple": "balle" },
+    { "src": "rr", "code": "r", "exemple": "terre" },
+    { "src": "ss", "code": "!", "exemple": "passer" },
+    { "src": "tt", "code": "#", "exemple": "natte" },
+    { "src": "pp", "code": "%", "exemple": "nappe" },
+    { "src": "bb", "code": "%", "exemple": "abbé" },
+    { "src": "dd", "code": "#", "exemple": "addition" },
+    { "src": "ff", "code": "?", "exemple": "affaire" },
+    { "src": "mm", "code": "€", "exemple": "pomme" },
+    { "src": "nn", "code": "€", "exemple": "bonne" },
+    { "src": "cc", "code": "&", "exemple": "accord" },
+    { "src": "gg", "code": "&", "exemple": "agglomérer" },
+    { "src": "zz", "code": "!", "exemple": "pizza" }
+  ],
+  
   "nasales_complexes": [
     { "src": "ain", "code": "$", "exemple": "pain" },
     { "src": "aim", "code": "$", "exemple": "faim" },
@@ -44,5 +70,7 @@
     { "src": "oi", "code": "wa", "exemple": "roi" }
   ]
 }
+
+
 
 

@@ -17,3 +17,5 @@ console.log(`${sorted.length} caractères phonétiques trouvés :\n`);
 console.log(sorted.join('  '));
 
 
+
+
