@@ -1,0 +1,16 @@
+# ===========================================
+# Configuration Supabase pour Facilidys
+# À ajouter dans supabase/config.toml
+# ===========================================
+
+[functions.predict]
+# Vérification JWT (mettre false pour accès public)
+verify_jwt = false
+
+# Limite de mémoire (le dictionnaire fait ~22MB)
+# La fonction a besoin d'au moins 256MB
+# memory = 256  # Décommentez si supporté par votre plan
+
+# Timeout en secondes
+# max_duration = 10  # Décommentez si supporté
+
