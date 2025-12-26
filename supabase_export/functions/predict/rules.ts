@@ -29,6 +29,9 @@ export interface SegmentationRule {
   action: string;
 }
 
+// <--- NOUVEAU : Regex pour détecter une terminaison de type voyelle + n/m
+export const REGEX_NASAL_DETECTION = /([aeiouyéèêàâ]+)([nm]+)$/i;
+
 // Patterns triés par longueur décroissante
 export const PATTERNS: Pattern[] = [
   // Suffixes tion
@@ -262,4 +265,3 @@ export const SEGMENTATION: SegmentationRule[] = [
     action: "remove_first"
   },
 ];
-
