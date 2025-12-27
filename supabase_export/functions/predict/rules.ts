@@ -127,3 +127,7 @@ export const SEGMENTATION: SegmentationRule[] = [
   { name: "elision_l", triggers: null, prefixes: ["l"], minRestLength: 2, action: "remove_first" },
   { name: "elision_d", triggers: null, prefixes: ["d"], minRestLength: 2, action: "remove_first" },
 ];
+
+// Liste des consonnes pouvant être muettes à la fin d'un mot
+// (Ex: le 't' de 'koment', le 'd' de 'canard', le 's' de 'tapis')
+export const SILENT_FINAL_LETTERS = new Set(['t', 's', 'd', 'x', 'p', 'g', 'z', 'c']);

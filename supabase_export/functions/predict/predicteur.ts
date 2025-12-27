@@ -2,7 +2,7 @@
  * PREDICTEUR DYS - VERSION FINALE RÉCURSIVE
  */
 
-import { PATTERNS, CHARS, FINAL_VOWEL_EXPANSIONS, ORTHO_EQUIVALENTS, START_EQUIVALENTS, CONTEXT, SEGMENTATION, type ContextRule } from "./rules.ts";
+import { PATTERNS, CHARS, FINAL_VOWEL_EXPANSIONS, ORTHO_EQUIVALENTS, START_EQUIVALENTS, CONTEXT, SEGMENTATION, SILENT_FINAL_LETTERS, type ContextRule } from "./rules.ts";
 
 export interface DictEntry { id: number; ortho: string; phon: string; phon_dys: string; lemme: string; cgram: string; genre?: string; nombre?: string; infover?: string; freq: number; }
 export interface DictData { meta: { total_entries: number; }; entries: DictEntry[]; index_phon_dys: Record<string, number[]>; idx_ortho_prefix: Record<string, number[]>; idx_dys_prefix: Record<string, number[]>; }
@@ -50,7 +50,7 @@ export class PredicteurDys {
   }
 
   /**
-   * TRANSCODEUR RÉCURSIF (Avec Cache)
+   * TRANSCODEUR RÉCURSIF (Avec Gestion des Lettres Muettes Finales)
    * Génère automatiquement les variantes nasales et non-nasales.
    * Ex: "komen" -> ["&$$", "&o€$"]
    */
@@ -62,7 +62,7 @@ export class PredicteurDys {
     const results = new Set<string>();
     const str = input.toLowerCase();
 
-    // 1. Branche Patterns
+    // 1. Branche Patterns (ex: "om" -> "$")
     for (const p of PATTERNS) {
       if (str.startsWith(p.src)) {
         const suffixes = this.transcodePolyvalent(str.slice(p.src.length), cache, depth + 1);
@@ -77,8 +77,15 @@ export class PredicteurDys {
       const char = str[0];
       const charCode = CHARS[char] !== undefined ? CHARS[char] : char;
       const suffixes = this.transcodePolyvalent(str.slice(1), cache, depth + 1);
+      
       for (const s of suffixes) {
         results.add(charCode + s);
+      }
+
+      // --- UTILISATION DE LA RÈGLE IMPORTÉE ---
+      // Si c'est la dernière lettre et qu'elle est dans la liste des muettes possibles
+      if (str.length === 1 && SILENT_FINAL_LETTERS.has(char)) {
+        results.add(""); // On ajoute l'option "silence"
       }
     }
 
