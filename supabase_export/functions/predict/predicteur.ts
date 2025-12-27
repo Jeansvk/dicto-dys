@@ -1,5 +1,8 @@
 /**
- * PREDICTEUR DYS - VERSION FINALE RÉCURSIVE
+ * PREDICTEUR DYS - VERSION TURBO DEFINITIVE
+ * - Récursivité avec Sauts Intelligents (Performance)
+ * - Gestion lettres muettes finales
+ * - Gestion variantes G/J, K/C...
  */
 
 import { PATTERNS, CHARS, FINAL_VOWEL_EXPANSIONS, ORTHO_EQUIVALENTS, START_EQUIVALENTS, CONTEXT, SEGMENTATION, SILENT_FINAL_LETTERS, type ContextRule } from "./rules.ts";
@@ -50,71 +53,75 @@ export class PredicteurDys {
   }
 
   /**
-   * TRANSCODEUR RÉCURSIF (Avec Gestion des Lettres Muettes Finales)
-   * Génère automatiquement les variantes nasales et non-nasales.
-   * Ex: "komen" -> ["&$$", "&o€$"]
+   * TRANSCODEUR RÉCURSIF OPTIMISÉ ("TURBO")
+   * - Utilise un index (pas de slice) pour la mémoire.
+   * - Coupe les branches inutiles si un "Gros Pattern" (>= 3 lettres) est trouvé.
    */
-  private transcodePolyvalent(input: string, cache = new Map<string, string[]>(), depth = 0): string[] {
-    if (input.length === 0) return [""];
-    if (cache.has(input)) return cache.get(input)!;
-    if (depth > 20) return []; 
+  private transcodePolyvalent(input: string, index = 0, cache = new Map<string, string[]>(), depth = 0): string[] {
+    const cacheKey = `${index}`;
+    if (cache.has(cacheKey)) return cache.get(cacheKey)!;
+    if (depth > 15) return [""]; 
+    if (index >= input.length) return [""];
 
     const results = new Set<string>();
-    const str = input.toLowerCase();
+    let foundBigChunk = false;
 
-    // 1. Branche Patterns (ex: "om" -> "$")
+    // 1. Branche Patterns
     for (const p of PATTERNS) {
-      if (str.startsWith(p.src)) {
-        const suffixes = this.transcodePolyvalent(str.slice(p.src.length), cache, depth + 1);
+      if (input.startsWith(p.src, index)) {
+        
+        // Optimisation : Si le pattern est long (ex: "eau"), on le privilégie et on ignore le découpage lettre/lettre
+        if (p.src.length >= 3) {
+          foundBigChunk = true;
+        }
+
+        const nextIndex = index + p.src.length;
+        const suffixes = this.transcodePolyvalent(input, nextIndex, cache, depth + 1);
         for (const s of suffixes) {
           results.add(p.code + s);
         }
       }
     }
 
-    // 2. Branche Littérale (fallback)
-    if (str.length > 0) {
-      const char = str[0];
+    // 2. Branche Littérale (lettre par lettre)
+    // On ne la fait que si on n'a pas trouvé de pattern évident et long
+    if (!foundBigChunk) {
+      const char = input[index];
       const charCode = CHARS[char] !== undefined ? CHARS[char] : char;
-      const suffixes = this.transcodePolyvalent(str.slice(1), cache, depth + 1);
+      const suffixes = this.transcodePolyvalent(input, index + 1, cache, depth + 1);
       
       for (const s of suffixes) {
         results.add(charCode + s);
       }
 
-      // --- UTILISATION DE LA RÈGLE IMPORTÉE ---
-      // Si c'est la dernière lettre et qu'elle est dans la liste des muettes possibles
-      if (str.length === 1 && SILENT_FINAL_LETTERS.has(char)) {
-        results.add(""); // On ajoute l'option "silence"
+      // Gestion lettre muette finale (ex: le 't' de koment)
+      if (index === input.length - 1 && SILENT_FINAL_LETTERS.has(char)) {
+        results.add(""); 
       }
     }
 
-    const resArray = Array.from(results);
-    cache.set(input, resArray);
+    // On limite à 4 résultats par étape pour éviter l'explosion combinatoire
+    const resArray = Array.from(results).slice(0, 4);
+    cache.set(cacheKey, resArray);
     return resArray;
   }
 
-  /**
-   * Utilitaire simple pour le scoring (prend le premier code)
-   */
   transcode(input: string): string {
      const codes = this.transcodePolyvalent(input);
      return codes.length > 0 ? codes[0] : "";
   }
 
-  /**
-   * Génère toutes les clés phonétiques possibles (limitées à 10)
-   */
   private getPhoneticKeys(input: string): string[] {
     const codes = this.transcodePolyvalent(input);
-    return Array.from(new Set(codes)).slice(0, 10);
+    // On limite à 5 clés max pour ne pas ralentir la DB
+    return Array.from(new Set(codes)).slice(0, 5);
   }
 
   private generateOrthoVariants(prefix: string): string[] {
     const variants = new Set([prefix]);
     const lowerPrefix = prefix.toLowerCase();
     
-    // C'est ici que START_EQUIVALENTS donne le bonus orthographique
+    // Gère les équivalences de début (K/C, G/J, F/PH...)
     for (const [startChar, replacements] of Object.entries(START_EQUIVALENTS)) {
       if (lowerPrefix.startsWith(startChar)) {
         const rest = lowerPrefix.slice(startChar.length);
@@ -122,19 +129,16 @@ export class PredicteurDys {
       }
     }
     
-    for (const [pattern, equivalents] of Object.entries(ORTHO_EQUIVALENTS)) {
-      if (lowerPrefix.endsWith(pattern)) {
-        const base = lowerPrefix.slice(0, -pattern.length);
-        for (const equiv of equivalents) variants.add(base + equiv);
-      }
-      const idx = lowerPrefix.indexOf(pattern);
-      if (idx !== -1 && idx < lowerPrefix.length - pattern.length) {
-        const before = lowerPrefix.slice(0, idx);
-        const after = lowerPrefix.slice(idx + pattern.length);
-        for (const equiv of equivalents) variants.add(before + equiv + after);
-      }
+    // Ortho Equivalents (Suffixes) - Uniquement si mot court
+    if (prefix.length < 6) {
+        for (const [pattern, equivalents] of Object.entries(ORTHO_EQUIVALENTS)) {
+            if (lowerPrefix.endsWith(pattern)) {
+                const base = lowerPrefix.slice(0, -pattern.length);
+                for (const equiv of equivalents) variants.add(base + equiv);
+            }
+        }
     }
-    return Array.from(variants);
+    return Array.from(variants).slice(0, 6);
   }
 
   private searchByOrthoPrefix(prefix: string): DictEntry[] {
@@ -142,20 +146,24 @@ export class PredicteurDys {
     const seenIds = new Set<number>();
     prefix = prefix.toLowerCase();
     const variants = this.generateOrthoVariants(prefix);
-    const candidateIds = new Set<number>();
+    
+    const uniquePrefixes2 = new Set<string>();
     for (const variant of variants) {
-      if (variant.length >= 2) {
-        const prefix2 = variant.substring(0, 2);
-        const ids = this.idxOrthoPrefix[prefix2];
-        if (ids) for (const id of ids) candidateIds.add(id);
-      }
+        if (variant.length >= 2) uniquePrefixes2.add(variant.substring(0, 2));
     }
+
+    const candidateIds = new Set<number>();
+    for (const p2 of uniquePrefixes2) {
+        const ids = this.idxOrthoPrefix[p2];
+        if (ids) for (const id of ids) candidateIds.add(id);
+    }
+
     for (const id of candidateIds) {
       if (seenIds.has(id)) continue;
       const entry = this.entries[id];
       const orthoLower = entry.ortho.toLowerCase();
-      for (const variant of variants) {
-        if (orthoLower.startsWith(variant)) {
+      for (let i = 0; i < variants.length; i++) {
+        if (orthoLower.startsWith(variants[i])) {
           seenIds.add(id);
           results.push({ ...entry });
           break;
@@ -168,9 +176,11 @@ export class PredicteurDys {
   private searchByPhonDys(userCode: string): DictEntry[] {
     const results: DictEntry[] = [];
     const seenIds = new Set<number>();
+    
     if (userCode.length >= 2 && Object.keys(this.idxDysPrefix).length > 0) {
       const dysPrefix2 = userCode.substring(0, 2);
       const candidateIds = this.idxDysPrefix[dysPrefix2];
+      
       if (candidateIds) {
         for (const id of candidateIds) {
           if (seenIds.has(id)) continue;
@@ -181,6 +191,7 @@ export class PredicteurDys {
           }
         }
       }
+
       const lastChar = userCode.slice(-1);
       const expansions = FINAL_VOWEL_EXPANSIONS[lastChar];
       if (expansions && userCode.length === 2) {
@@ -218,17 +229,13 @@ export class PredicteurDys {
 
   private isPhoneticMatch(userCode: string, targetCode: string): boolean {
     if (targetCode.startsWith(userCode)) return true;
-    const areFinalSoundsCompatible = (userFinal: string, targetFinal: string): boolean => {
-      const expansions = FINAL_VOWEL_EXPANSIONS[userFinal];
-      if (!expansions) return false;
-      return expansions.includes(targetFinal);
-    };
     if (userCode.length >= 2 && targetCode.length >= userCode.length) {
       const userWithoutLast = userCode.slice(0, -1);
-      const lastUserChar = userCode.slice(-1);
       if (targetCode.startsWith(userWithoutLast)) {
-        const targetAtPos = targetCode[userWithoutLast.length];
-        if (areFinalSoundsCompatible(lastUserChar, targetAtPos)) return true;
+         const lastUserChar = userCode.slice(-1);
+         const targetAtPos = targetCode[userWithoutLast.length];
+         const expansions = FINAL_VOWEL_EXPANSIONS[lastUserChar];
+         if (expansions && expansions.includes(targetAtPos)) return true;
       }
     }
     return false;
@@ -237,9 +244,11 @@ export class PredicteurDys {
   private generateSegmentations(input: string, prevWord: string): Array<{ text: string; isSegmentation: boolean; rule?: string }> {
     const variants: Array<{ text: string; isSegmentation: boolean; rule?: string }> = [{ text: input, isSegmentation: false }];
     if (input.length < 2) return variants;
+    
     const firstChar = input.charAt(0).toLowerCase();
     const rest = input.slice(1);
     const prevLower = prevWord.toLowerCase();
+    
     for (const rule of SEGMENTATION) {
       if (!rule.prefixes.includes(firstChar)) continue;
       if (rest.length < rule.minRestLength) continue;
@@ -263,8 +272,9 @@ export class PredicteurDys {
     for (const seg of segmentations) {
       let searchInput = seg.text;
       let localFallback = false;
+      
       while (searchInput.length >= minPrefixLength) {
-        const userDysCodes = this.getPhoneticKeys(searchInput);
+        const userDysCodes = this.getPhoneticKeys(searchInput); 
         let foundResults = false;
 
         const orthoResults = this.searchByOrthoPrefix(searchInput);
@@ -276,7 +286,8 @@ export class PredicteurDys {
         }
 
         if (usePhonetic) {
-          for (const dysCode of userDysCodes) {
+          const keysToSearch = userDysCodes.length > 4 ? userDysCodes.slice(0, 4) : userDysCodes;
+          for (const dysCode of keysToSearch) {
             const phonResults = this.searchByPhonDys(dysCode);
             for (const item of phonResults) {
               if (!candidatesMap.has(item.id)) {
@@ -286,18 +297,22 @@ export class PredicteurDys {
             }
           }
         }
+
         if (foundResults) {
           if (seg.isSegmentation) usedSegmentation = seg;
-          break;
+          break; 
         }
+
         searchInput = searchInput.slice(0, -1);
         localFallback = true;
+        if (originalInput.length - searchInput.length > 2) break;
       }
     }
 
     const effectiveInput = usedSegmentation?.text || originalInput;
     const userDysCodes = this.getPhoneticKeys(effectiveInput);
     const contextRule = this.getContextFilter(prevWord);
+    
     let results = Array.from(candidatesMap.values());
     const maxFreq = Math.max(...results.map((r) => r.freq || 0), 1);
 

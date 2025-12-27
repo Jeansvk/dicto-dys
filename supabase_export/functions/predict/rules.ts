@@ -1,24 +1,42 @@
 /**
- * RÈGLES DYS COMPILÉES - VERSION FINALE
+ * RÈGLES DYS COMPILÉES - VERSION FINALE "DOUBLE CONSONNE FIX"
+ * Ajout des protections omm/onn pour que "komment" marche avec l'algo Turbo.
  */
 
 export interface Pattern { src: string; code: string; }
 export interface ContextRule { name: string; filter: { cgram: string[] | null; genre: string | null; nombre: string | null; infover_match: string[] | null; infover_exclude: string[] | null; }; boost: number; penalty: number; }
 export interface SegmentationRule { name: string; triggers: Set<string> | null; prefixes: string[]; minRestLength: number; action: string; }
 
-// Équivalences strictes de début de mot (pour le scoring visuel)
+// Liste des consonnes pouvant être muettes à la fin d'un mot
+export const SILENT_FINAL_LETTERS = new Set(['t', 's', 'd', 'x', 'p', 'g', 'z', 'c']);
+
+// Équivalences strictes de début de mot
 export const START_EQUIVALENTS: Record<string, string[]> = {
   k: ["c", "qu", "ch"],
-  c: ["k", "qu"],
+  c: ["k", "qu", "s", "z"],
   qu: ["k", "c"],
   f: ["ph"],
   ph: ["f"],
   z: ["s"],
-  s: ["z", "c", "ç"]
+  s: ["z", "c", "ç"],
+  g: ["j"],
+  j: ["g"]
 };
 
-// Patterns standards (Sans doublons, l'algo récursif fait le reste)
 export const PATTERNS: Pattern[] = [
+  // --- 1. PROTECTIONS DES DOUBLES CONSONNES (CRITIQUE POUR ALGO TURBO) ---
+  // Comme ces motifs font 3 lettres, l'algo Turbo va les prioriser et
+  // empêcher le moteur de lire "om" comme une nasale.
+  { src: "omm", code: "o€" }, // Fix pour "komment" -> o + m
+  { src: "onn", code: "o€" }, // Fix pour "bonn" -> o + n
+  { src: "amm", code: "a€" }, // Fix pour "flamm" -> a + m
+  { src: "ann", code: "a€" }, // Fix pour "pann" -> a + n
+  { src: "imm", code: "i€" },
+  { src: "inn", code: "i€" },
+  { src: "umm", code: "y€" },
+  { src: "unn", code: "y€" },
+  
+  // --- 2. RÈGLES CLASSIQUES ---
   // Suffixes complexes
   { src: "stion", code: "!#i$" },
   { src: "xtion", code: "&#i$" },
@@ -39,7 +57,7 @@ export const PATTERNS: Pattern[] = [
   // Digrammes voyelles
   { src: "eau", code: "o" },
   
-  // Doubles consonnes (Simplification)
+  // Doubles consonnes (Simplification standard)
   { src: "ll", code: "l" },
   { src: "rr", code: "r" },
   { src: "ss", code: "!" },
@@ -60,7 +78,7 @@ export const PATTERNS: Pattern[] = [
   { src: "en", code: "$" },
   { src: "em", code: "$" },
   { src: "on", code: "$" },
-  { src: "om", code: "$" },
+  { src: "om", code: "$" }, // C'est celle-ci qui posait problème sans la protection "omm"
   { src: "un", code: "$" },
   { src: "um", code: "$" },
   { src: "in", code: "$" },
@@ -127,7 +145,3 @@ export const SEGMENTATION: SegmentationRule[] = [
   { name: "elision_l", triggers: null, prefixes: ["l"], minRestLength: 2, action: "remove_first" },
   { name: "elision_d", triggers: null, prefixes: ["d"], minRestLength: 2, action: "remove_first" },
 ];
-
-// Liste des consonnes pouvant être muettes à la fin d'un mot
-// (Ex: le 't' de 'koment', le 'd' de 'canard', le 's' de 'tapis')
-export const SILENT_FINAL_LETTERS = new Set(['t', 's', 'd', 'x', 'p', 'g', 'z', 'c']);
